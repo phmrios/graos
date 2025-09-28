@@ -2,16 +2,13 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <title>Yellow Bourbon (Serra do Caparaó) — Review</title>
+    <title><!-- TÍTULO DA PÁGINA (aparece na aba do navegador) --></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Notas de prova e preparo do Yellow Bourbon da Serra do Caparaó."
-    />
-    <link rel="canonical" href="./post-2025-09-20-yellow-bourbon.html" />
+    <meta name="description" content="<!-- RESUMO CURTO DO POST (SEO) -->" />
+    <link rel="canonical" href="./post-AAAA-MM-DD-titulo.html" />
 
-    <!-- (Opcional) Repetir parte da paleta para consistência visual do post avulso -->
     <style>
+      /* Paleta básica do site */
       :root {
         --bg: #f3f0ee;
         --surface: #f3f0ef;
@@ -28,12 +25,7 @@
         margin: 0;
         background: var(--bg);
         color: var(--ink-1);
-        font-family:
-          system-ui,
-          -apple-system,
-          Segoe UI,
-          Roboto,
-          Arial;
+        font-family: system-ui, sans-serif;
         line-height: 1.7;
       }
       header,
@@ -46,22 +38,11 @@
         background: linear-gradient(0deg, var(--brand-3), var(--brand));
         border-bottom: 1px solid var(--border);
       }
-      a:focus-visible {
-        outline: 3px solid var(--brand-2);
-        outline-offset: 2px;
-      }
       article {
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);
         padding: 18px;
-      }
-      figure {
-        margin: 0;
-      }
-      figcaption {
-        color: var(--ink-2);
-        font-size: 0.95rem;
       }
       .meta {
         color: var(--ink-2);
@@ -83,125 +64,65 @@
         border-radius: 10px;
         text-decoration: none;
       }
-      .back:hover {
-        background: #efecea;
-      }
-      .rating {
-        display: inline-flex;
-        gap: 2px;
-      }
     </style>
 
-    <!-- METADADOS para o index.html ler (JSON simples): title, date(ISO), author, tags, rating(0-5), summary -->
+    <!-- BLOCO DE METADADOS (usado pelo index.html) -->
     <script id="post-meta" type="application/json">
       {
-        "title": "Yellow Bourbon (Serra do Caparaó) — Review",
-        "date": "2025-09-20",
+        "title": "COLOQUE O TÍTULO AQUI",
+        "date": "AAAA-MM-DD",
         "author": "Pedro Rios",
-        "tags": ["yellow-bourbon", "caparao", "coado", "v60"],
-        "rating": 4,
-        "summary": "Doçura alta com notas de mel e castanha. Ótimo para coado no V60 com moagem média-fina."
-      }
-    </script>
-
-    <!-- SEO opcional (dados estruturados) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": "Yellow Bourbon (Serra do Caparaó) — Review",
-        "author": { "@type": "Person", "name": "Pedro Rios" },
-        "datePublished": "2025-09-20",
-        "keywords": "café, review, yellow bourbon, caparaó, v60",
-        "image": "hero-yellow-bourbon.jpg",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://seu-dominio.example/post-2025-09-20-yellow-bourbon.html"
-        }
+        "tags": ["coloque", "tags", "aqui"],
+        "rating": 0,
+        "summary": "COLOQUE UM RESUMO CURTO AQUI (1 ou 2 frases)"
       }
     </script>
   </head>
   <body>
     <header>
-      <!-- Link de retorno para a timeline -->
-      <a class="back" href="./" aria-label="Voltar para a lista de reviews"
-        >← Voltar</a
-      >
-      <h1>Yellow Bourbon (Serra do Caparaó) — Review</h1>
-      <!-- Atributo datetime ISO ajuda tanto o leitor quanto a ordenação no index -->
+      <!-- Link para voltar à lista -->
+      <a class="back" href="./">← Voltar</a>
+      <h1><!-- TÍTULO DO POST AQUI --></h1>
       <p class="meta">
-        Publicado em <time datetime="2025-09-20">20 set 2025</time> · por Pedro
-        Rios
+        Publicado em
+        <time datetime="AAAA-MM-DD"><!-- DATA LEGÍVEL AQUI --></time> · por
+        Pedro Rios
       </p>
     </header>
 
     <main>
-      <article
-        aria-label="Conteúdo do review: Yellow Bourbon (Serra do Caparaó)"
-      >
-        <!-- Imagem do grão/copo: sempre use alt descritivo para atender WCAG -->
+      <article>
+        <!-- IMAGEM PRINCIPAL DO POST -->
+        <!-- Troque "imagem.jpg" e o alt -->
         <figure>
-          <img
-            src="hero-yellow-bourbon.jpg"
-            alt="Xícara de café filtrado ao lado de grãos Yellow Bourbon torrados"
-          />
-          <figcaption>Preparo no V60, 1:15, 92 °C, 2:30 min.</figcaption>
+          <img src="imagem.jpg" alt="Descrição da imagem (sempre colocar)" />
+          <figcaption><!-- Se quiser, explique a foto --></figcaption>
         </figure>
 
-        <!-- Corpo do post -->
+        <!-- CONTEÚDO DO POST -->
         <h2>Notas de prova</h2>
-        <p>
-          Doçura alta com destaque para mel claro, castanha-do-pará e leve toque
-          floral. Acidez cítrica média, corpo sedoso e finalização limpa.
-        </p>
+        <p><!-- Escreva aqui as notas de sabor, aroma, corpo, acidez... --></p>
 
         <h2>Receita</h2>
         <ul>
-          <li>18 g de café · 270 g de água (1:15)</li>
-          <li>Moagem média-fina (parecida com açúcar cristal)</li>
-          <li>Bloom 30 s com 40 g; depois duas adições até 2:30</li>
+          <li><!-- Ex: 18 g café · 270 g água (1:15) --></li>
+          <li><!-- Ex: Moagem média-fina --></li>
+          <li><!-- Ex: Bloom 30s, depois duas adições --></li>
         </ul>
 
         <h2>Conclusão</h2>
-        <p>
-          Excelente custo-benefício para coado diário. Para espresso, exigiu
-          moagem mais fina e pressão consistente para segurar a acidez.
-        </p>
+        <p><!-- Escreva aqui a sua conclusão sobre o grão --></p>
 
-        <!-- Tags ajudam na busca do index -->
+        <!-- TAGS DO POST (aparecem na página individual e ajudam na busca) -->
         <p>
-          <span class="tag">#yellow-bourbon</span>
-          <span class="tag">#caparaó</span>
+          <span class="tag">#exemplo</span>
           <span class="tag">#v60</span>
         </p>
 
-        <!-- Nota em "grãos" (0-5). O index usa este valor para montar o card. -->
-        <p class="rating" aria-label="Nota 4 de 5">
-          <!-- Semântica visual; o index não lê estes SVGs, usa o JSON acima -->
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
-            <path
-              fill="#1a1a1a"
-              d="M12 2c4.97 0 9 4.03 9 9 0 6.63-5.37 11-11 11-4.97 0-9-4.03-9-9C1 6.37 6.37 2 12 2z"
-            />
-          </svg>
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
-            <path
-              fill="#1a1a1a"
-              d="M12 2c4.97 0 9 4.03 9 9 0 6.63-5.37 11-11 11-4.97 0-9-4.03-9-9C1 6.37 6.37 2 12 2z"
-            />
-          </svg>
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
-            <path
-              fill="#1a1a1a"
-              d="M12 2c4.97 0 9 4.03 9 9 0 6.63-5.37 11-11 11-4.97 0-9-4.03-9-9C1 6.37 6.37 2 12 2z"
-            />
-          </svg>
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
-            <path
-              fill="#1a1a1a"
-              d="M12 2c4.97 0 9 4.03 9 9 0 6.63-5.37 11-11 11-4.97 0-9-4.03-9-9C1 6.37 6.37 2 12 2z"
-            />
-          </svg>
+        <!-- NOTA (0 a 5) EM "GRÃOS" -->
+        <p class="rating" aria-label="Nota X de 5">
+          <!-- Pode repetir SVGs de grão conforme a nota -->
+          <!-- Exemplo: 3 grãos = nota 3 -->
         </p>
       </article>
     </main>
