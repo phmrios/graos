@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="pt-BR" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Café do Pedro — Reviews de Grãos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7D24E" />
+    <meta
+      name="description"
+      content="Reviews francas e objetivas de café: notas, moagem, métodos e impressão no paladar."
+    />
+
+    <!-- Paleta solicitada como variáveis CSS -->
+    <style>
+      :root {
+        --bg: #f3f0ee; /* cinza claro, fundo principal */
+        --bg-2: #efecea; /* cinza claro secundário */
+        --bg-3: #f3f1f3; /* quase branco com leve tom frio */
+        --surface: #f3f0ef; /* branco levemente acinzentado */
+        --surface-2: #f4f0ee; /* variação de cinza claro */
+        --brand: #f7d24e; /* amarelo vibrante, barras de destaque */
+        --brand-2: #f7d149; /* amarelo intenso */
+        --brand-3: #f6d664; /* amarelo dourado suave */
+        --ink-1: #2b2b2b; /* texto principal */
+        --ink-2: #4a4a4a; /* texto secundário */
+        --ink-muted: #6b6b6b; /* texto terciário */
+        --border: #e6e1dc;
+        --radius: 14px;
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        --maxw: 960px;
+      }
+
+      /* Reset + base acessível */
+      * {
+        box-sizing: border-box;
+      }
+      html:focus-within {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          Noto Sans,
+          Arial,
+          "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: var(--bg);
+        color: var(--ink-1);
+        line-height: 1.6;
+      }
+      a {
+        color: #1a1a1a;
+        text-decoration-thickness: 0.1em;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--brand-2);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.03);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      /* Mantém contraste AA: textos sempre escuros; amarelos só como fundo */
+      .brand-chip,
+      .btn,
+      .search input[type="search"] {
+        color: #1a1a1a;
+      }
+
+      /* Layout */
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: auto;
+      }
+      .skip-link:focus {
+        left: 12px;
+        top: 12px;
+        z-index: 1000;
+        background: var(--brand);
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+      }
+
+      header {
+        background: linear-gradient(0deg, var(--brand-3), var(--brand));
+        border-bottom: 1px solid var(--border);
+      }
+      .header-inner {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 16px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .logo h1 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        letter-spacing: 0.3px;
+      }
+
+      .search {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+      }
+      .search label {
+        position: absolute;
+        left: -9999px;
+      }
+      .search input[type="search"] {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 12px 14px;
+        min-height: 44px; /* alvo confortável (WCAG 2.5.8 AA) */
+      }
+      .search button {
+        min-height: 44px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--surface-2);
+      }
+      .search button:hover {
+        background: var(--bg-2);
+      }
+
+      main {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 16px;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin: 6px 0 12px;
+      }
+      .count {
+        font-size: 0.95rem;
+        color: var(--ink-2);
+      }
+
+      /* Timeline tipo Twitter */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px;
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 12px;
+      }
+      .card + .card {
+        margin-top: 12px;
+      }
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: baseline;
+      }
+      .author {
+        font-weight: 700;
+      }
+      .handle {
+        color: var(--ink-muted);
+      }
+      .date {
+        color: var(--ink-muted);
+        font-size: 0.95rem;
+      }
+      .title {
+        margin: 2px 0 6px;
+        font-size: 1.1rem;
+        line-height: 1.4;
+      }
+      .excerpt {
+        color: var(--ink-2);
+        margin: 0 0 8px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        background: var(--brand-3);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 0.9rem;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 12px;
+        min-height: 44px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg-3);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .btn:hover {
+        background: var(--bg-2);
+      }
+      .rating {
+        display: inline-flex;
+        gap: 2px;
+        align-items: center;
+      }
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 16px 0;
+      }
+
+      /* Estado vazio / carregando */
+      #status[aria-busy="true"]::after {
+        content: "Carregando posts…";
+        display: inline-block;
+        margin-left: 8px;
+      }
+      .empty {
+        padding: 18px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+
+      /* Preferências do usuário */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto;
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <header role="banner">
+      <div class="header-inner">
+        <a class="logo" href="./" aria-current="page">
+          <!-- Logotipo simples com contraste -->
+          <svg
+            aria-hidden="true"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            focusable="false"
+          >
+            <path
+              fill="#1a1a1a"
+              d="M3 8h16a3 3 0 1 1 0 6H18a6 6 0 1 1-12 0V8zm12 6h4a1 1 0 1 0 0-2h-4v2z"
+            />
+          </svg>
+          <h1>Café do Pedro</h1>
+        </a>
+
+        <form
+          id="form-busca"
+          class="search"
+          role="search"
+          aria-label="Busca de posts"
+        >
+          <label for="q">Buscar nos posts</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="Busque por grão, torra, método, nota…"
+            autocomplete="off"
+            aria-describedby="count"
+          />
+          <button type="submit" aria-label="Pesquisar">Pesquisar</button>
+        </form>
+      </div>
+    </header>
+
+    <main id="conteudo" role="main">
+      <div class="toolbar">
+        <strong class="count" id="count" aria-live="polite">0 posts</strong>
+        <div id="status" aria-live="polite" aria-busy="true"></div>
+      </div>
+
+      <section
+        id="timeline"
+        role="feed"
+        aria-busy="true"
+        aria-label="Linha do tempo dos reviews"
+      >
+        <!-- Cards serão inseridos aqui via JS -->
+      </section>
+
+      <div id="vazio" class="empty" hidden>
+        Sem resultados para a busca. Tente outras palavras ou limpe o filtro.
+      </div>
+    </main>
+
+    <footer
+      role="contentinfo"
+      style="
+        max-width: var(--maxw);
+        margin: 24px auto;
+        padding: 16px;
+        color: var(--ink-muted);
+      "
+    >
+      <div class="divider" aria-hidden="true"></div>
+      <p>
+        Conteúdo: © Pedro Rios. Este site usa apenas HTML/CSS/JS estáticos.
+        Acessível segundo WCAG 2.2 AA.
+      </p>
+    </footer>
+
+    <script>
+      // --------- Utilidades de acessibilidade e UI ----------
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+      const state = {
+        postsIndex: [], // [{file, title, date, tags, author, rating, summary, hero}]
+        postsDOMCache: new Map(), // file -> {doc, text}
+        filtered: [],
+      };
+
+      const BEAN_SVG = () => {
+        const span = document.createElement("span");
+        span.innerHTML =
+          '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="#1a1a1a" d="M12 2c4.97 0 9 4.03 9 9 0 6.63-5.37 11-11 11-4.97 0-9-4.03-9-9C1 6.37 6.37 2 12 2zm0 2c-2.68 0-5.06 1.33-6.5 3.36C9.83 8 12.5 10.67 12.5 14c0 2.43-1.3 4.56-3.25 5.75C14.22 19.41 19 15.33 19 11c0-3.87-3.13-7-7-7z"/></svg>';
+        return span.firstChild;
+      };
+
+      function formatDate(iso) {
+        try {
+          const d = new Date(iso);
+          return d.toLocaleDateString("pt-BR", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          });
+        } catch {
+          return iso;
+        }
+      }
+
+      function updateCount() {
+        const n = state.filtered.length || state.postsIndex.length;
+        $("#count").textContent = `${n} ${n === 1 ? "post" : "posts"}`;
+      }
+
+      function cardTemplate(meta) {
+        const art = document.createElement("article");
+        art.className = "card";
+        art.setAttribute("role", "article");
+        art.setAttribute("aria-labelledby", `t-${meta.id}`);
+
+        const beans = document.createElement("span");
+        beans.className = "rating";
+        const rate = Math.max(0, Math.min(5, Number(meta.rating || 0)));
+        for (let i = 0; i < rate; i++) beans.appendChild(BEAN_SVG());
+
+        art.innerHTML = `
+        <div class="avatar" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="#1a1a1a"></circle>
+            <rect x="4" y="14" width="16" height="6" rx="3" fill="#1a1a1a"></rect>
+          </svg>
+        </div>
+        <div>
+          <div class="meta">
+            <span class="author">${meta.author || "Pedro Rios"}</span>
+            <span class="handle">@cafedopedro</span>
+            <span class="date" aria-label="Publicado em ${formatDate(meta.date)}">· ${formatDate(meta.date)}</span>
+          </div>
+          <h2 class="title" id="t-${meta.id}">${meta.title}</h2>
+          <p class="excerpt">${meta.summary || ""}</p>
+          ${meta.tags?.length ? `<div class="tags" aria-label="Tags">${meta.tags.map((t) => `<span class="tag">#${t}</span>`).join("")}</div>` : ""}
+          <div class="actions">
+            <a class="btn" href="${meta.file}" aria-label="Ler o post completo: ${meta.title}">Ler post</a>
+            ${rate ? `<span class="tag" aria-label="Nota ${rate} de 5"><strong>${rate}/5</strong></span>` : ""}
+            <span class="tag" title="Avaliação em grãos" aria-hidden="true">${beans.outerHTML}</span>
+          </div>
+        </div>
+      `;
+        return art;
+      }
+
+      async function loadManifest() {
+        try {
+          const res = await fetch("posts.json", { cache: "no-store" });
+          if (!res.ok) throw new Error("Manifesto não encontrado");
+          const list = await res.json();
+          if (!Array.isArray(list))
+            throw new Error("Formato inválido em posts.json");
+          return list;
+        } catch (e) {
+          $("#status").textContent =
+            "Dica: crie um arquivo posts.json com a lista de posts.";
+          return [];
+        }
+      }
+
+      async function fetchPostMeta(file) {
+        if (state.postsDOMCache.has(file)) return state.postsDOMCache.get(file);
+        const res = await fetch(file, { cache: "no-store" });
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const metaTag = doc.querySelector(
+          '#post-meta[type="application/json"]',
+        );
+        let meta = {};
+        if (metaTag) {
+          try {
+            meta = JSON.parse(metaTag.textContent);
+          } catch {}
+        }
+        // fallback: pegar título/primeiro parágrafo
+        const title =
+          meta.title ||
+          doc.querySelector("article h1")?.textContent?.trim() ||
+          file;
+        const summary =
+          meta.summary ||
+          doc.querySelector("article p")?.textContent?.trim()?.slice(0, 220) ||
+          "";
+        const text = doc.querySelector("article")?.innerText || "";
+        const tags = Array.isArray(meta.tags) ? meta.tags : [];
+        const author = meta.author || "Pedro Rios";
+        const date =
+          meta.date ||
+          doc.querySelector("time")?.getAttribute("datetime") ||
+          "";
+        const rating = meta.rating || 0;
+        const data = { file, title, summary, text, tags, author, date, rating };
+        state.postsDOMCache.set(file, data);
+        return data;
+      }
+
+      function render(list) {
+        const root = $("#timeline");
+        root.innerHTML = "";
+        if (!list.length) {
+          $("#vazio").hidden = false;
+        } else {
+          $("#vazio").hidden = true;
+          for (const meta of list) {
+            meta.id = meta.file.replace(/[^a-z0-9]/gi, "-");
+            root.appendChild(cardTemplate(meta));
+          }
+        }
+        root.setAttribute("aria-busy", "false");
+        $("#status").removeAttribute("aria-busy");
+        updateCount();
+      }
+
+      async function init() {
+        const files = await loadManifest();
+        const metas = [];
+        for (const file of files) {
+          try {
+            metas.push(await fetchPostMeta(file));
+          } catch {}
+        }
+        // Ordena por data desc quando possível
+        metas.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        state.postsIndex = metas;
+        state.filtered = [];
+        render(metas);
+        $("#status").textContent = "";
+      }
+
+      // Busca acessível (filtra por título, tags, autor e texto)
+      function runSearch(q) {
+        const query = q.trim().toLowerCase();
+        if (!query) {
+          state.filtered = [];
+          render(state.postsIndex);
+          return;
+        }
+        const out = state.postsIndex.filter((p) => {
+          return (
+            p.title?.toLowerCase().includes(query) ||
+            p.author?.toLowerCase().includes(query) ||
+            p.tags?.join(" ").toLowerCase().includes(query) ||
+            p.text?.toLowerCase().includes(query)
+          );
+        });
+        state.filtered = out;
+        render(out);
+      }
+
+      $("#form-busca").addEventListener("submit", (e) => {
+        e.preventDefault();
+        runSearch($("#q").value);
+      });
+      $("#q").addEventListener("input", (e) => {
+        // busca ao digitar (leve)
+        runSearch(e.target.value);
+      });
+
+      init();
+    </script>
+  </body>
+</html>
