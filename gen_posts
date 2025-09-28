@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""
+gen_posts — Gera/atualiza o manifesto posts.json para o seu site de reviews.
+
+- Procura arquivos que batam com o padrão (padrão: "post-*.html")
+- Ordena por data AAAA-MM-DD extraída do nome (mais novos primeiro); se não tiver data, fica depois, por ordem alfabética
+- (Opcional) Valida se existe <script id="post-meta" type="application/json"> em cada post
+- Escreve um JSON com a lista de arquivos, ex: ["post-2025-09-20-....html", "post-..."]
+
+Uso:
+  ./gen_posts                      # Gera posts.json na pasta atual
+  ./gen_posts --dir site           # Gera dentro de 'site'
+  ./gen_posts --pattern "review-*.html"
+  ./gen_posts --no-validate        # Não checar #post-meta
+  ./gen_posts --dry-run            # Mostra a lista, não escreve arquivo
+"""
+
+from __future__ import annotations
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Optional, Tuple, List
+
+DATE_RE = re.compile(r"(\d{4})-(\d{2})-(\d{2})")  # AAAA-MM-DD
+
+def infer_date_key(name: str) -> Optional[Tuple[int, int, int]]:
+    """Extrai AAAA-MM-DD do nome do arquivo. Retorna (ano, mes, dia) ou None."""
+    m = DATE_RE.search(name)
+    if not m:
+        return None
+    try:
+        y, mo, d = map(int, m.groups())
+        return (y, mo, d)
+    except Exception:
+        return None
+
+def read_has_post_meta(path: Path) -> bool:
+    """Checa se o arquivo contém o bloco <script id="post-meta" type="application/json">."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return False
+    return ('id="post-meta"' in text) and ('type="application/json"' in text)
+
+def find_posts(root: Path, pattern: str) -> List[Path]:
+    return [p for p in root.glob(pattern) if p.is_file()]
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Gera posts.json para o site de reviews.")
+    parser.add_argument("--dir", default=".", help="Diretório onde procurar e escrever posts.json (padrão: .)")
+    parser.add_argument("--pattern", default="post-*.html", help="Padrão de arquivos (glob). Ex.: post-*.html")
+    parser.add_argument("--output", default="posts.json", help="Nome do arquivo de saída (padrão: posts.json)")
+    parser.add_argument("--indent", type=int, default=2, help="Indentação do JSON (padrão: 2)")
+    parser.add_argument("--no-validate", action="store_true", help="Não checar presença de #post-meta")
+    parser.add_argument("--dry-run", action="store_true", help="Não escrever arquivo; apenas imprimir JSON no stdout")
+    args = parser.parse_args()
+
+    root = Path(args.dir).resolve()
+    if not root.exists() or not root.is_dir():
+        print(f"ERRO: diretório não encontrado: {root}", file=sys.stderr)
+        return 1
+
+    posts = find_posts(root, args.pattern)
+    if not posts:
+        print("AVISO: nenhum post encontrado com o padrão informado.", file=sys.stderr)
+
+    # Ordenação: com data primeiro (mais novos antes), depois os sem data em alfabética
+    def sort_key(pth: Path):
+        dk = infer_date_key(pth.name)
+        if dk:
+            y, m, d = dk
+            # Negativo para ordenar desc por data; 0 coloca "com data" antes dos "sem data"
+            return (0, -y, -m, -d, pth.name.lower())
+        return (1, 0, 0, 0, pth.name.lower())
+
+    posts_sorted = sorted(posts, key=sort_key)
+
+    # Validação opcional do bloco #post-meta
+    if not args.no_validate:
+        warnings = []
+        for pth in posts_sorted:
+            if not read_has_post_meta(pth):
+                warnings.append(f"AVISO: {pth.name} não contém bloco #post-meta (JSON). "
+                                "O index ainda funciona, mas você perde título/resumo otimizados.")
+        if warnings:
+            print("\n".join(warnings), file=sys.stderr)
+
+    rel_paths = [p.name for p in posts_sorted]  # nomes relativos
+
+    if args.dry_run:
+        print(json.dumps(rel_paths, ensure_ascii=False, indent=args.indent))
+    else:
+        output_path = root / args.output
+        try:
+            output_path.write_text(json.dumps(rel_paths, ensure_ascii=False, indent=args.indent) + "\n", encoding="utf-8")
+            print(f"Gerado: {output_path}")
+        except Exception as e:
+            print(f"ERRO ao escrever {output_path}: {e}", file=sys.stderr)
+            return 2
+
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
